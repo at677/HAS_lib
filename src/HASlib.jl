@@ -34,7 +34,11 @@ function h2m(m)
     hb^2/(2*m)
 end
 
-function cc(Ei,theta,m,maxgrid=5,st_p_wl=100)
+function W(z)
+    I*center_pot(z,D,kappa)/h2m(m) - M_K
+end
+
+function cc(Ei,theta,m,maxgrid=5,st_p_wl=100,n_open=10,n_close=10)
 
     Ei = Ei*1.6e-19
 
@@ -44,16 +48,48 @@ function cc(Ei,theta,m,maxgrid=5,st_p_wl=100)
     g,gi = hexgrid(maxgrid)
     g = g.*1e10
 
+    
     kz2 = -((g[:,1].+Ki).^2 .+ g[:,2].^2).+ ki^2
 
     index = sortperm(kz2)
     sorted_kz2 = kz2[index]
     
     #find lowest open channel
-    min_index_open = argmax(sorted_kz2 .>= 0.0)
-    println(sorted_kz2[min_index_open])
-    println(min_index_open)
-    println(sorted_kz2[min_index_open-1])
+    min_index_open = findfirst(x -> x >= 0, sorted_kz2)
+    println(sorted_kz2[min_index_open],"->",min_index_open,"\n",
+            sorted_kz2[min_index_open-1],"->",min_index_open-1)
+
+
+    open_index = min_index_open:length(sorted_kz2)
+    if n_open >= 0 & length(sorted_kz2) <= min_index_open+n_open
+        open_index = min_index_open:min_index_open+n_open
+    end
+
+    close_index = 1:min_index_open-1
+    if n_close >= 0 &  min_index_open-1-n_close <= 1
+        close_index = min_index_open-1-n_close:min_index_open-1
+    end
+
+    println("open: ",open_index," close:",close_index)
+    
+    open_kz2 = sorted_kz2[open_index]
+    open_g = g[index,:][open_index,:]
+    open_gi = gi[index,:][open_index,:]
+
+    close_kz2 = sorted_kz2[close_index]
+    close_g = g[index,:][close_index,:]
+    close_gi = gi[index,:][close_index,:]
+
+    display(hcat(open_kz2,open_gi,open_g))
+
+    # calculate coupling
+
+    n_total = length(open_kz2)+length(close_kz2)
+
+    M_0 = I
+    M_K = Array{Float64,2}(undef,n_total,n_total)
+    M_E = Array{Float64,2}(undef,n_total,n_total)
+
 
     e_max = maximum(kz2)
     step = 2*π / (st_p_wl*sqrt(e_max))

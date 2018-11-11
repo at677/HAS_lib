@@ -19,7 +19,29 @@ function Base.show(result::CCSim)
     print(", kz2: ",result.kz2,")")
 end
 
-function hexgrid(n::Int64)
+"""
+Calculate a hexagonal grid with a radius n and a lattice constant of 1
+angle between a1 and a2 = 120 deg
+
+# Arguments
+- `n:Int64`
+- `a₁=1`: base vector length 1
+- `a₂=1`: base vector length 2
+
+pattern (n = 3):
+```
+  + + +
+ + + + +
++ + + + +
+ + + + +
+  + + +
+```
+
+# returns (g,gi)
+ - g .. 2d array of lattice point coordinates
+ - gi ... index of lattice point
+"""
+function hexgrid(n::Int64, a₁ = 1,a₂ = 1)
     a = [1.0 -0.5;
          0.0 sqrt(3.0)/2.0]
 

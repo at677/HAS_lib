@@ -3,6 +3,9 @@ export hexgrid, h2m, cc, fox_goodwin, CCSim
 
 using LinearAlgebra
 
+include("bases.jl")
+include("fourier.jl")
+
 struct CCSim
     n_total
     n_open

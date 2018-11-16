@@ -1,6 +1,8 @@
 using Test
 using HASlib
 
+include("fourier.jl")
+
 @test size(HASlib.hexgrid(1)[1])==(7,2)
 @test isapprox(h2m(1), 5.56e-69;atol=1e-71,rtol=0)
 

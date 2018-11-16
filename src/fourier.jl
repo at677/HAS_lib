@@ -1,4 +1,4 @@
-export potential,CorrugatedMorse
+export potential,CorrugatedMorse,calc_VG
 
 struct WCache
     M_no_z
@@ -24,30 +24,36 @@ function build_VG_Cache(max_gi,z)
 
 end
 
-function calc_VG(g,l::Generic2DLattice,conf::CorrugatedMorse)
-    rr1 = 0:1.*l.a1
-    rr2 = 0:1.*l.a2
-
-    VG = 0
-    for r1 in rr1, r2 in rr2
-        r = r1.+r2
-        VG += potential(conf,r[1],r[2],z)*exp(-1im*g'r)
-    end
-    VG *= 2π
-
-end
-
-
 struct CorrugatedMorse
     D
     κ
     h
+    lattice::Generic2DLattice
 end
 
-function potential(conf::CorrugatedMorse,x,y,z)
-    @unpack D,κ,h = conf
+function calc_VG(g,l::Generic2DLattice,conf::CorrugatedMorse,z,steps=100)
+    VG = 0+0im
+    rng = range(0.0,length=steps,1)
+    for i in rng , j in rng
+        r1 = l.a1.*i
+        r2 = l.a2.*j
+        r = r1+r2
+        VG += potential(conf,r[1],r[2],z)*exp(-1im*(g'*r))
+    end
+    VG *= 2π/(steps^2)
+end
 
-    @. D*(exp(-2z/κ)-2*exp(-z/κ))
+
+function potential(conf::CorrugatedMorse,x,y,z)
+    @unpack D,κ,h,lattice = conf
+    @unpack a1,a2 = lattice
+    R = [x,y]
+
+    # TODO: only for 60 deg(a1,a2)
+    ξ = h*(cos(2π*(a1'*R)/norm(a1)^2)+
+           cos(2π*(a2'*R)/norm(a2)^2)+
+           cos(2π*((a1-a2)'*R)/norm(a1-a2)^2))
+    @. D*(exp(-2*(z-ξ)/κ)-2*exp(-z/κ))
 
 end
 

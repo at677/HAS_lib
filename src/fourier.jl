@@ -24,11 +24,19 @@ function build_VG_Cache(max_gi,z)
 
 end
 
-struct CorrugatedMorse
+struct CorrugatedMorse{T <: Abstract2DLattice}
     D
     κ
     h
-    lattice::Generic2DLattice
+    lattice::T
+end
+
+struct HexGrid <: Abstract2DLattice
+    a
+end
+
+function potential(conf::CorrugatedMorse{HexGrid},x,y,z)
+    3
 end
 
 function calc_VG(g,l::Generic2DLattice,conf::CorrugatedMorse,z,steps=100)

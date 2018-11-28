@@ -24,10 +24,12 @@ function Base.show(ch::ScatteringChannels)
         end
 end
 
+abstract type Abstract2DLattice end 
+
 """
 Structure containing the real and the reciprical basis vectors of a surface
 """
-struct Generic2DLattice
+struct Generic2DLattice <: Abstract2DLattice
     a1
     a2
     b1

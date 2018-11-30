@@ -1,28 +1,6 @@
 export potential,CorrugatedMorse,calc_VG
 
-struct WCache
-    M_no_z
-end
-
-function get_w(z,ch::ScatteringChannels,ki)
-    norm²_g = @. norm(ch.g)^2
-    get_V(z,ch) + I*norm(ki)^2 + Diagonal(norm²_g) 
-end
-
-function get_V(z,ch::ScatteringChannels)
-    l = length(ch.g)
-    V = Array{Float64,2}(undef,l,l)
-    for i in 1:l, j in 1:l
-        V[i.j] = get_VG(z,gi[i]-gi[j])
-    end
-end
-
-function get_VG(gi,z)
-end
-
-function build_VG_Cache(max_gi,z)
-
-end
+using SpecialFunctions
 
 struct CorrugatedMorse{T <: Abstract2DLattice}
     D
@@ -33,10 +11,50 @@ end
 
 struct HexGrid <: Abstract2DLattice
     a
+    l::Generic2DLattice
 end
 
-function potential(conf::CorrugatedMorse{HexGrid},x,y,z)
-    3
+HexGrid(a) = HexGrid(a,Generic2DLattice([a,0],[cos(π/3),sin(π/3)].*a))
+
+function get_w(z,ch::ScatteringChannels,ki,conf::CorrugatedMorse)
+    get_V(z,ch,conf) + Diagonal(ch.kz²)
+end
+
+function get_V(z,ch::ScatteringChannels,conf::CorrugatedMorse)
+    @unpack gi = ch
+    l = length(gi)
+    V = Array{Float64,2}(undef,l,l)
+    for i in 1:l, j in 1:l
+        V[i,j] = get_VG(z,gi[i]-gi[j],conf)
+    end
+    V
+end
+
+function get_VG(z,g,conf::CorrugatedMorse{HexGrid})
+    @unpack κ,h,D = conf
+    if g[1]==0 && g[2]==0
+        return D*(exp(-2*κ*z)+2*exp(-κ*z))
+    end
+
+    V0 = calc_VG_factor([0,0],conf,1)
+    VG = calc_VG_factor(g,conf,V0)
+
+    VG *= exp(-2*κ*z)*D
+
+    return VG
+end
+
+function calc_VG_factor(g,conf::CorrugatedMorse{HexGrid},div)
+    @unpack κ,h,D = conf
+    @unpack a = conf.lattice
+
+    kmax = 10
+    α = 2*κ*h*a/3
+    VG = 0.0 
+    for k in -kmax:kmax
+        VG += besseli(k,α)*(besseli(k+g[2],α)*besseli(k+g[1],α) + besseli(k-g[2],α)*besseli(k-g[1],α))
+    end
+    VG / div
 end
 
 function calc_VG(g,l::Generic2DLattice,conf::CorrugatedMorse,z,steps=100)

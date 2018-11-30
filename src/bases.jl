@@ -13,7 +13,7 @@ struct ScatteringChannels
     "reciprical lattice index"
     gi
     "kz² after scattering"
-    kz²
+    kz²::Array{Real}
 end
 
 function Base.show(ch::ScatteringChannels)

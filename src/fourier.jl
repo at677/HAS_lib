@@ -9,12 +9,7 @@ struct CorrugatedMorse{T <: Abstract2DLattice}
     lattice::T
 end
 
-struct HexGrid <: Abstract2DLattice
-    a
-    l::Generic2DLattice
-end
 
-HexGrid(a) = HexGrid(a,Generic2DLattice([a,0],[cos(π/3),sin(π/3)].*a))
 
 function get_w(z,ch::ScatteringChannels,ki,conf::CorrugatedMorse)
     get_V(z,ch,conf) + Diagonal(ch.kz²)

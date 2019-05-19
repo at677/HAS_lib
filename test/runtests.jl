@@ -1,7 +1,7 @@
 using Test
 using HASlib
 
-include("test_python.jl")
+#include("test_python.jl")
 include("test_cc.jl")
 
 #include("fourier.jl")

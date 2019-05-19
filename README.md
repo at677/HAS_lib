@@ -5,7 +5,7 @@
 Library for analysing helium atom scattering data
 
 
-```
+```julia
 # define some constants
 mel = 1.6021766208000002e-22 # J
 A = 1e-10 # 1 angstrom in meters
@@ -35,3 +35,4 @@ channels = HASlib.sort_and_cut(channels,5,0)
 
 # calculate scattered intensities
 cc(channels,a,h,D,xi,theta,m_He3,(-1*A
+```

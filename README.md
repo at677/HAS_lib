@@ -24,7 +24,7 @@ m_He3 = 5.0082343984338715e-27 # kg
 # beam wave vector
 ki = sqrt(Ei/HASlib.h2m(m_He3))
 
-# define a hexogal grid
+# define a hexagonal grid
 grid = HASlib.HexGrid(a)
 # set beam direction to 1*a1 0*a2
 b1,b2 = HASlib.rotate_reciprocal(grid.l,[1,0])

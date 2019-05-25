@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Close coupling formalism · HASlib</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>HASlib</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href="closecoupling.html">Close coupling formalism</a><ul class="internal"></ul></li><li><a class="toctext" href="index.html">HASlib.jl</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="closecoupling.html">Close coupling formalism</a></li></ul><a class="edit-page" href="https://github.com/feanor12/HASlib.jl/blob/master/docs/src/closecoupling.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Close coupling formalism</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Close-coupling-formalism-1" href="#Close-coupling-formalism-1">Close coupling formalism</a></h1><p>Upercase vectors denote vectors parralel to the surface. For example <span>$\vec R, \vec K_i$</span></p><p>Subsitute the potential $V$ and the wavefunction $\psi$ as ourier series time-independend Schrödinger equation. The potential is written as:</p><div>\[V(\vec r) = \sum_G V_G(z) e^{i \vec G \cdot \vec R}\]</div><p>and the wavefunction can be written as:</p><div>\[\psi(\vec r) = \sum_G \psi_G(z) e^{i (\vec G + \vec K_i) \cdot \vec R} \]</div><p>The timeindependend Schrödinger equation for the scattering Problem has the following form.</p><div>\[\left[-\Delta - \vec k_i^2 + V(\vec r)\right] \psi(\vec r) = 0\]</div><p>The first part <span>$(-\Delta \psi(\vec r))$</span> can be rewritten using the partial derivatives and the fourier series of <span>$\psi$</span>.</p><div>\[\begin{align}
+&amp;-(\partial^2_x + \partial^2_y + \partial^2_z) \sum_G \psi_G(z) e^{i (\vec G + \vec K_i) \cdot \vec R} =\\
+
+&amp;- \sum_G e^{i (\vec G + \vec K_i) \cdot \vec R} \partial^2_z \psi_G(z)  -
+\sum_G \psi_G(z) (\partial^2_x+\partial^2_y) e^{i (\vec G + \vec K_i) \cdot \vec R} =\\
+
+&amp;- \sum_G e^{i (\vec G + \vec K_i) \cdot \vec R} \psi_G^{&#39;&#39;}(z)  +
+\sum_G \psi_G(z) \left((G_x + K_{i_x})^2+(G_y + K_{i_y})^2\right) e^{i (\vec G + \vec K_i) \cdot \vec R}=\\
+
+&amp;- \sum_G e^{i (\vec G + \vec K_i) \cdot \vec R} \psi_G^{&#39;&#39;}(z)  +
+\sum_G \psi_G(z) (\vec G + \vec K_i)^2 e^{i (\vec G + \vec K_i) \cdot \vec
+R}=\\
+
+&amp;\sum_G e^{i (\vec G + \vec K_i) \cdot \vec R} \left((\vec G + \vec K_i)^2 \psi_G(z) - \psi_G^{&#39;&#39;}(z)\right)
+
+\end{align}\]</div><p>Together with the second part <span>$(\vec k_i^2  \psi(\vec r))$</span> the equations looks like this:</p><div>\[\sum_G e^{i (\vec G + \vec K_i) \cdot \vec R} \left[\left((\vec G + \vec K_i)^2-\vec k_i^2\right) \psi_G(z) - \psi_G^{&#39;&#39;}(z)\right]\]</div><p>The third part (<span>$V(\vec r) \psi(\vec r)$</span>) can be written as:</p><div>\[\begin{align}
+&amp;\sum_G V_G(z) e^{i \vec G \cdot \vec R} \sum_G \psi_G(z) e^{i (\vec G + \vec K_i) \cdot \vec R} = \\
+&amp;\sum_{\vec G,\vec G&#39;} V_G(z) e^{i (\vec G + \vec G&#39; + \vec K_i) \cdot \vec R}\psi_{G&#39;}(z) 
+\end{align}\]</div><p>Combining all three parts and multiplying with <span>$e^{-i (\vec G&#39;&#39;+\vec K_i) \cdot \vec R}$</span> results in:</p><div>\[\sum_G e^{i (\vec G - \vec G^{&#39;&#39;}) \cdot \vec R} \left[\left((\vec G + \vec K_i)^2-\vec k_i^2\right) \psi_G(z) - \psi_G^{&#39;&#39;}(z)\right]+\\
+\sum_{\vec G,\vec G&#39;} V_G(z) e^{i (\vec G + \vec G&#39; - \vec G^{&#39;&#39;}) \cdot \vec R}\psi_{G&#39;}(z) = 0\]</div><p>Integrating over der unit cell will eliminate the exponential terms by introducing dirac deltas.</p><div>\[\sum_G \int_U e^{i (\vec G - \vec G^{&#39;&#39;}) \cdot \vec R} d\vec R \left[\left((\vec G + \vec K_i)^2-\vec k_i^2\right) \psi_G(z) - \psi_G^{&#39;&#39;}(z)\right]+\\
+\sum_{\vec G,\vec G&#39;} V_G(z)  \psi_{G&#39;}(z)\int_U e^{i (\vec G + \vec G&#39; - \vec G^{&#39;&#39;}) \cdot \vec R} d\vec R = \\
+
+\sum_G A_U\delta(\vec G - \vec G^{&#39;&#39;}) \left[\left((\vec G + \vec K_i)^2-\vec k_i^2\right) \psi_G(z) - \psi_G^{&#39;&#39;}(z)\right]+\\
+\sum_{\vec G,\vec G&#39;} V_G(z)  \psi_{G&#39;}(z)A_U\delta(\vec G + \vec G&#39; - \vec G^{&#39;&#39;}) = \\
+
+A_U \left[\left((\vec G^{&#39;&#39;} + \vec K_i)^2-\vec k_i^2\right) \psi_{G^{&#39;&#39;}}(z) - \psi_{G^{&#39;&#39;}}^{&#39;&#39;}(z)\right]+
+\sum_{\vec G&#39;} V_{G^{&#39;&#39;}-G^{&#39;}}(z)  \psi_{G^{&#39;}}(z)A_U \]</div><p>With this the Schrödinger equation transforms to:</p><div>\[\psi_{G^{&#39;&#39;}}^{&#39;&#39;}(z) 
+ = \sum_{\vec G&#39;} V_{G^{&#39;&#39;}-G^{&#39;}}(z)  \psi_{G^{&#39;}}(z)
+- \left(\vec k_i^2 - (\vec G^{&#39;&#39;} + \vec K_i)^2\right) \psi_{G^{&#39;&#39;}}(z) \]</div><footer><hr/><a class="next" href="index.html"><span class="direction">Next</span><span class="title">HASlib.jl</span></a></footer></article></body></html>

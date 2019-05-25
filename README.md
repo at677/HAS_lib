@@ -1,6 +1,7 @@
 # HASlib.jl
 
 [![Build Status](https://travis-ci.org/feanor12/HASlib.jl.svg?branch=master)](https://travis-ci.org/feanor12/HASlib.jl)
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://feanor12.github.io/HASlib.jl/dev)
 
 Library for analysing helium atom scattering data
 

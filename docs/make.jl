@@ -3,8 +3,8 @@ using HASlib
 
 makedocs(
     sitename = "HASlib",
-    format = :html,
-    modules = [HASlib]
+    modules = [HASlib],
+    format = Documenter.HTML(prettyurls = false)
 )
 
 # Documenter can also automatically deploy documentation to gh-pages.

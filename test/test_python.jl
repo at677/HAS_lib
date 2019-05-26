@@ -41,18 +41,20 @@ mb1,mb2 = HASlib.rotate_reciprocal(grid.l,[-2,1])
 @test b1 ≈ -mb1
 @test b2 ≈ -mb2
 
+
 b1,b2 = HASlib.rotate_reciprocal(grid.l,[1,0])
-ERG = haslib.CC_2D_old(h,a,D,xi,Ei,theta,b1,b2,G_ope=5,G_clo=3,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150)
+ERG = haslib.icc_2d_2.iCC_2D_2(h,1.0,a,D,xi,Ei,theta,b1,b2,floq=0,Gope=-1,Gclo=50,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150)
 
 m_He3 = 5.0082343984338715e-27
 ki = sqrt(Ei/HASlib.h2m(m_He3))
 
 channels = HASlib.get_channels(b1,b2,ki,theta*pi/180,5)
-channels = HASlib.sort_and_cut(channels,5,3)
+channels = HASlib.sort_and_cut(channels,-1,50)
 result = cc(channels,a,h,D,xi,theta,m_He3,(-1*A,6*A),st_p_wl=150)
 
-@test sort(result[:,1]) ≈ sort(ERG[:,3])
+@test sort(result[:,1]) ≈ sort(ERG[:,7])
 
 using BenchmarkTools
 display(@benchmark cc(channels,a,h,D,xi,theta,m_He3,(-1*A,6*A),st_p_wl=150))
-display(@benchmark haslib.CC_2D_old(h,a,D,xi,Ei,theta,b1,b2,G_ope=5,G_clo=3,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))
+display(@benchmark haslib.CC_2D_old(h,a,D,xi,Ei,theta,b1,b2,G_ope=-1,G_clo=50,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))
+display(@benchmark haslib.icc_2d_2.iCC_2D_2(h,1,a,D,xi,Ei,theta,b1,b2,Gope=-1,Gclo=50,floq=1,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))

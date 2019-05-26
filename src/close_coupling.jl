@@ -1,4 +1,4 @@
-using SpecialFunctions
+using SpecialFunctions, LinearAlgebra
 
 struct CCSim
     n_total
@@ -31,17 +31,23 @@ function fox_goodwin_step!(w_p1,w_0,w_m1,r)
         r
 end
 
-function fox_goodwin(z,w)
+function fox_goodwin(z,w!,n)
     h = z[2]-z[1]
     c1 = h^2/12
 
-    w_m1 = c1*w(z[1])
-    w_0 = c1*w(z[2])
-
+    w_m1 = Array{typeof(z[1]),2}(undef,n,n)
+    w_0 = similar(w_m1)
+    w_p1 = similar(w_m1)
     r  = fill!(similar(w_0),0)
-    w_p1 = similar(w_0)
+
+    w!(w_m1,z[1])
+    lmul!(c1,w_m1)
+    w!(w_0,z[2])
+    lmul!(c1,w_0)
+
     for i in 3:length(z)
-        w_p1 = c1*w(z[i])
+        w!(w_p1,z[i])
+        lmul!(c1,w_p1)
         fox_goodwin_step!(w_p1,w_0,w_m1,r)
     end
     r
@@ -60,18 +66,25 @@ function get_w_fun(channels,a,h,D,xi,m)
 	n = length(channels.kz2)
 	V0(z) = D*(exp(-2*xi*z) - 2*exp(-xi*z))
 	V1(z) = D*exp(-2*xi*z)
-    M_E = Array{Float64,2}(undef,n,n)
+        M_E = Array{Float64,2}(undef,n,n)
 	c0 = coupling(a,h,xi,(0,0))
 	for i in 1:size(M_E,1), j in 1:size(M_E,2)
 	    g1,g2 = channels.gi[i].-channels.gi[j]
-		M_E[j,i] = coupling(a,h,xi,(g1,g2),c0)
+	    M_E[j,i] = coupling(a,h,xi,(g1,g2),c0)
 	end
 	for i in 1:size(M_E,1)
-		M_E[i,i] = 0
+	    M_E[i,i] = 0
 	end
-	function w(z)
-		(M_E*V1(z) + I*V0(z))./h2m(m) - Diagonal(channels.kz2)
-	end
+        function w!(w,z)
+            v0 = V0(z)/h2m(m)
+            v1 = V1(z)/h2m(m)
+            for i in 1:size(w,1), j in 1:size(w,2)
+                w[i,j] = v1 * M_E[i,j]
+            end
+            for i in 1:size(w,1)
+                w[i,i] = v0 - channels.kz2[i]
+            end
+        end
 end
 
 function cc(channels::ScatteringChannels,a,h,D,xi, theta,m,z;st_p_wl=100)
@@ -92,7 +105,7 @@ function cc(channels::ScatteringChannels,a,h,D,xi, theta,m,z;st_p_wl=100)
     w = get_w_fun(channels,a,h,D,xi,m)
 	
 	# solve trasition matrix r
-    r = fox_goodwin(zrange,w)
+    r = fox_goodwin(zrange,w,length(channels.kz2))
 
     S0_m1 = zeros(size(r,1))
     S0_00 = zeros(size(r,1))

@@ -1,3 +1,10 @@
+# Examples
+
+This page is a work in progress
+
+## Defining a hexagonal grid
+
+
 ```julia
 grid = HASlib.HexGrid(4e-10)
 # output

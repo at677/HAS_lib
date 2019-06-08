@@ -2,6 +2,12 @@
 
 This page is a work in progress
 
+```@meta
+DocTestSetup = quote
+  using HASlib
+end
+```
+
 ## Defining a hexagonal grid
 
 

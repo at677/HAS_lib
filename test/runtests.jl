@@ -1,8 +1,13 @@
 using Test
 using HASlib
 
+const mel = 1.6021766208000002e-22
+const A = 1e-10
+const m_He3 = 5.0082343984338715e-27
+
 #include("test_python.jl")
 include("test_cc.jl")
+include("test_driftscan.jl")
 
 #include("fourier.jl")
 
@@ -21,4 +26,3 @@ ch =  get_channels(l.b1,l.b2,3,π/2,Int(ceil(3*sin(π/2)/r)))
 #w(z)=rand(3,3)*z
 #@test length(HASlib.fox_goodwin(z,w))==length(w(0))
 #show(HASlib.cc(3,2,3*1.6e-27,z,4,2,2))
-

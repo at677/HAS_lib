@@ -57,4 +57,4 @@ result = cc(channels,a,h,D,xi,theta,m_He3,(-1*A,6*A),st_p_wl=150)
 using BenchmarkTools
 display(@benchmark cc(channels,a,h,D,xi,theta,m_He3,(-1*A,6*A),st_p_wl=150))
 display(@benchmark haslib.CC_2D_old(h,a,D,xi,Ei,theta,b1,b2,G_ope=-1,G_clo=50,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))
-display(@benchmark haslib.icc_2d_2.iCC_2D_2(h,1,a,D,xi,Ei,theta,b1,b2,Gope=-1,Gclo=50,floq=1,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))
+display(@benchmark haslib.icc_2d_2.iCC_2D_2(h,1,a,D,xi,Ei,theta,b1,b2,Gope=-1,Gclo=50,floq=0,maxrad=20,sta_z=-1*A,end_z=6*A,st_p_wl=150))

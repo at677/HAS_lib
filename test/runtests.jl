@@ -5,7 +5,7 @@ const mel = 1.6021766208000002e-22
 const A = 1e-10
 const m_He3 = 5.0082343984338715e-27
 
-#include("test_python.jl")
+include("test_python.jl")
 include("test_cc.jl")
 include("test_driftscan.jl")
 

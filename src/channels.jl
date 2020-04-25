@@ -108,7 +108,7 @@ function filter_channels_radius(ch::ScatteringChannels,
         if norm(cur_g) <= max_norm
             push!(new_g,cur_g)
             push!(new_gi,gi[i])
-            push!(new_kz²,kz²[i])
+            push!(new_kz²,kz2[i])
         end
     end
     ScatteringChannels(new_g,new_gi,new_kz²)

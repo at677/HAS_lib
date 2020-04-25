@@ -22,10 +22,11 @@ function h2m(m)
 end
 
 function fox_goodwin_step!(w_p1,w_0,w_m1,r)
-        aa = 2*I+10*w_0
-        bb = (I-w_m1)*r
-        cc = I-w_p1
-        r .= (aa.-bb)\cc
+        #aa = 2*I+10*w_0
+        #bb = (I-w_m1)*r
+        #cc = I-w_p1
+        #r .= (aa.-bb)\cc
+        r .= (2*I+10*w_0 - (I-w_m1)*r )\(I-w_p1)
         w_m1 .= w_0
         w_0 .= w_p1
         r
